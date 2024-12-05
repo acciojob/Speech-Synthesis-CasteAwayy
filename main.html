@@ -28,16 +28,47 @@
 
     </div>
 
-<script>
-  const msg = new SpeechSynthesisUtterance();
-  let voices = [];
-  const voicesDropdown = document.querySelector('[name="voice"]');
-  const options = document.querySelectorAll('[type="range"], [name="text"]');
-  const speakButton = document.querySelector('#speak');
-  const stopButton = document.querySelector('#stop');
+ <script>
+      const msg = new SpeechSynthesisUtterance();
+      let voices = [];
+      const voicesDropdown = document.querySelector('[name="voice"]');
+      const options = document.querySelectorAll('[type="range"],[name="text"]','[name="rate"]');
+      const speakButton = document.querySelector("#speak");
+      const stopButton = document.querySelector("#stop");
 
-  //Your code goes here
-</script>
+      //Your code goes here
+      const synth = window.speechSynthesis;
+      voices = synth.getVoices();
+
+      voices.map((ele, ind) => {
+        const html = `<option id=${ind + 1}>${ele.name}</option>`;
+        voicesDropdown.insertAdjacentHTML("beforeend", html);
+      });
+      options[2].addEventListener("input", (e) => {
+        msg.text = e.target.value;
+        console.log(msg.text);
+      });
+      voicesDropdown.addEventListener("change", (e) => {
+        msg.voice = voices[e.target.selectedOptions[0].id - 1];
+      });
+
+      options[0].addEventListener("input", (e) => {
+        msg.rate = e.target.value;
+      });
+
+      options[1].addEventListener("input", (e) => {
+        msg.pitch = e.target.value;
+      });
+
+      speakButton.addEventListener("click", () => {
+        synth.speak(msg);
+      });
+
+      stopButton.addEventListener("click", () => {
+        synth.cancel();
+      });
+    </script>
+
 
 </body>
 </html>
